@@ -53,9 +53,7 @@ public class OfficeBuildingApplication {
             admin.setRoles(roles);
             userService.save(admin);
         }
-
     }
-
     public static void main(String[] args) {
         SpringApplication.run(OfficeBuildingApplication.class, args);
     }
