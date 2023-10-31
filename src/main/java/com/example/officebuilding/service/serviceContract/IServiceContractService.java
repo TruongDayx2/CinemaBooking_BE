@@ -11,4 +11,6 @@ public interface IServiceContractService extends IGeneralService<ServiceContract
 
     List<ServiceContractDTO> findAllByStatus(Integer scStatus);
     List<ServiceContractDTO> findServiceContractsWithinDateRange(Integer month, Integer year);
+
+    List<ServiceContractDTO> findAllByRoomId(Integer roomId);
 }

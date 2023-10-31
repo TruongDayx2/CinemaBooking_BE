@@ -62,6 +62,13 @@ public class ServiceContractService implements IServiceContractService {
                 .map((serviceContractEntity -> modelMapper.map(serviceContractEntity, ServiceContractDTO.class)))
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<ServiceContractDTO> findAllByRoomId(Integer roomId) {
+        List<ServiceContractEntity> serviceContractEntities = serviceContractRepository.findByRoomId(roomId);
+        return serviceContractEntities.stream()
+                .map((serviceContractEntity -> modelMapper.map(serviceContractEntity, ServiceContractDTO.class)))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public List<ServiceContractDTO> findServiceContractsWithinDateRange(Integer month, Integer year) {

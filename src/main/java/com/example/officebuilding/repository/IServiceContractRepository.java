@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IServiceContractRepository extends JpaRepository<ServiceContractEntity,Integer> {
     List<ServiceContractEntity> findByScStatus(Integer scStatus);
+    List<ServiceContractEntity> findByRoomId(Integer roomId);
 }

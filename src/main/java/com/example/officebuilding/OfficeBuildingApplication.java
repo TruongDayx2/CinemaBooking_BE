@@ -48,8 +48,9 @@ public class OfficeBuildingApplication {
             roleAdmin.setName("ROLE_ADMIN");
             roles.add(roleAdmin);
             admin.setUsername("admin");
-            admin.setPassword("12345678");
+            admin.setPassword("@Admin01");
             admin.setEmail("admin1@gmail.com");
+            admin.setFullname("Admin");
             admin.setRoles(roles);
             userService.save(admin);
         }

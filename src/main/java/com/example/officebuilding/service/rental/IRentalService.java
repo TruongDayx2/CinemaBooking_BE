@@ -10,6 +10,8 @@ public interface IRentalService extends IGeneralService<RentalDTO> {
     RentalDTO createRentalWithRoomStatusChange(RentalDTO rentalDTO, Integer newRoomStatus);
     void cancelRental(Integer rentalId, String dateEnd);
 
+    void cancelRentalWithService(Integer rentalId, String dateEnd);
+
     List<RentalDTO> findAllByStatus(Integer reStatus);
     List<RentalDTO> findAllByRoomIdAndStatus(Integer roomId, Integer reStatus);
 

@@ -72,6 +72,12 @@ public class RentalController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping("user/rental/cancelWithService/{id}")
+    public ResponseEntity<RentalDTO> cancelWithService(@PathVariable Integer id, @RequestParam String dateEnd){
+        rentalService.cancelRentalWithService(id,dateEnd);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("user/rental/findByStatus/{status}")
     public ResponseEntity<List<RentalDTO>> findAllRentalByStatus(@PathVariable Integer status){
         List<RentalDTO> rentals = rentalService.findAllByStatus(status);

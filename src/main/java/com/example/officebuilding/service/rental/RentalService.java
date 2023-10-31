@@ -2,10 +2,12 @@ package com.example.officebuilding.service.rental;
 
 import com.example.officebuilding.controller.RentalController;
 import com.example.officebuilding.dtos.RentalDTO;
+import com.example.officebuilding.dtos.ServiceContractDTO;
 import com.example.officebuilding.entities.RentalEntity;
 import com.example.officebuilding.repository.IRentalRepository;
 import com.example.officebuilding.service.rental.IRentalService;
 import com.example.officebuilding.service.room.RoomService;
+import com.example.officebuilding.service.serviceContract.ServiceContractService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,8 @@ public class RentalService implements IRentalService {
 
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private ServiceContractService serviceContractService;
     private static final Logger logger = LoggerFactory.getLogger(RentalController.class);
     @Override
     public List<RentalDTO> findAll(){
@@ -77,6 +81,31 @@ public class RentalService implements IRentalService {
     public void cancelRental(Integer rentalId, String dateEnd) {
         Optional<RentalEntity> rentalEntityOptional = rentalRepository.findById(rentalId);
         rentalEntityOptional.ifPresent(rentalEntity -> {
+            // Update rental status
+            rentalEntity.setReStatus(0);
+            rentalEntity.setReDateEnd(dateEnd);
+            rentalRepository.save(rentalEntity);
+
+            // Update room status using RoomService
+            roomService.updateRoomStatus(rentalEntity.getRoom().getId(), 0); // Assuming 0 represents available status
+        });
+    }
+    @Override
+    public void cancelRentalWithService(Integer rentalId, String dateEnd) {
+        Optional<RentalEntity> rentalEntityOptional = rentalRepository.findById(rentalId);
+        rentalEntityOptional.ifPresent(rentalEntity -> {
+            logger.info("service Contrat {}",rentalEntity.getRoom().getId());
+
+            List<ServiceContractDTO> serviceContracts = serviceContractService.findAllByRoomId(rentalEntity.getRoom().getId());
+            for (ServiceContractDTO serviceContract : serviceContracts) {
+                // Thực hiện hành động bạn muốn với mỗi hợp đồng dịch vụ, ví dụ:
+                 serviceContract.setScStatus(1);
+                 serviceContract.setScDateEnd(dateEnd);
+
+                 serviceContractService.save(serviceContract);
+//                logger.info("service Contrat {}",serviceContract.getId());
+            }
+
             // Update rental status
             rentalEntity.setReStatus(0);
             rentalEntity.setReDateEnd(dateEnd);
