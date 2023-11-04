@@ -7,8 +7,8 @@ import com.example.officebuilding.security.jwt.JwtResponse;
 import com.example.officebuilding.security.jwt.JwtService;
 import com.example.officebuilding.security.service.IRoleService;
 import com.example.officebuilding.security.service.IUserService;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
 @RestController
@@ -44,6 +38,11 @@ public class AuthController {
     private IUserService userService;
     @Autowired
     private IRoleService roleService;
+
+    @GetMapping("/admin/getAllRole")
+    public ResponseEntity<List<Role>> getAllRoles(){
+        return new ResponseEntity<>(roleService.findAll(),HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
@@ -80,8 +79,8 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
+    @PostMapping("/admin/register/{roleKey}")
+    public ResponseEntity<?> register(@RequestBody User user,@PathVariable int roleKey) {
         logger.info("User Sign Up. Message - {}", user);
         try {
             if(userService.findByUsername(user.getUsername()).isPresent()){
@@ -91,7 +90,17 @@ public class AuthController {
                 throw new Exception("Email đã tồn tại, vui lòng chọn Email khác");
             }
             String password = user.getPassword();
-            Role role = roleService.findByName("ROLE_USER");
+            Role role;
+            if (roleKey == 1) {
+                role = roleService.findByName("ROLE_ADMIN");
+            }else if (roleKey == 2){
+                role = roleService.findByName("ROLE_USER");
+            }else if (roleKey == 3){
+                role = roleService.findByName("ROLE_CUS");
+            }else{
+                throw new Exception("Vai trò không tồn tại");
+            }
+
             if (role == null) {
                 throw new Exception("Vai trò không tồn tại");
             }
