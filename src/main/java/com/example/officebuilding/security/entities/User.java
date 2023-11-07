@@ -21,6 +21,9 @@ public class User {
     @Column(nullable = false)
     private String fullname;
 
+    @Column(nullable = false)
+    private Integer userStatus;
+
     @Column(unique = true, nullable = false)
     private String email;
 

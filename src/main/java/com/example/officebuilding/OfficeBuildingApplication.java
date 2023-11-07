@@ -51,6 +51,7 @@ public class OfficeBuildingApplication {
             admin.setPassword("@Admin01");
             admin.setEmail("admin1@gmail.com");
             admin.setFullname("Admin");
+            admin.setUserStatus(1);
             admin.setRoles(roles);
             userService.save(admin);
         }

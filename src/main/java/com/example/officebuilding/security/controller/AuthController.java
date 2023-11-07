@@ -107,6 +107,7 @@ public class AuthController {
             Set<Role> roles = new HashSet<>();
             roles.add(role);
 
+            user.setUserStatus(1);
             user.setRoles(roles);
             userService.save(user);
             Authentication authentication = authenticationManager.authenticate(
